@@ -2,27 +2,26 @@
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import os
+from flask.ext.heroku import Heroku
 
 # grabs the folder where the script runs
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 # configuration
-DATABASE = 'flaskr.db'
+DATABASE = 'manifesto'
 DEBUG = True
 SECRET_KEY = 'my_precious'
 USERNAME = 'admin'
 PASSWORD = 'admin'
 
-# defines the full path for the database
-DATABASE_PATH = os.path.join(basedir, DATABASE)
-
 # database config
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_PATH
+# SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/manifesto'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # create and initialize app
 app = Flask(__name__)
 app.config.from_object(__name__)
+heroku = Heroku(app)
 db = SQLAlchemy(app)
 
 import models
@@ -33,7 +32,7 @@ def index():
     # db = get_db()
     # cur = db.execute('select * from entries order by id desc')
     # entries = cur.fetchall()
-    entries = db.session.query(models.Flaskr)
+    entries = db.session.query(models.Manifesto)
     return render_template('index.html', entries=entries)
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -68,7 +67,7 @@ def add_entry():
     #     [request.form['title'], request.form['text']]
     # )
     # db.commit()
-    new_entry = models.Flaskr(request.form['title'], request.form['text'])
+    new_entry = models.Manifesto(request.form['title'], request.form['text'])
     db.session.add(new_entry)
     db.session.commit()
     flash('New entry was sucessfully posted!')
@@ -83,7 +82,7 @@ def delete_entry(post_id):
         # db.execute('delete from entries where id= ' + post_id)
         # db.commit()
         new_id = post_id
-        db.session.query(models.Flaskr).filter_by(post_id = new_id).delete()
+        db.session.query(models.Manifesto).filter_by(post_id = new_id).delete()
         db.session.commit()
         result = {'status': 1, 'message': "Post Deleted"}
         flash('The entry was deleted.')

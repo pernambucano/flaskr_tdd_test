@@ -1,8 +1,8 @@
 from app import db
 
-class Flaskr(db.Model):
+class Manifesto(db.Model):
     
-    __tablename__ = "flaskr"
+    __tablename__ = "manifesto"
 
     post_id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String, nullable = False)
