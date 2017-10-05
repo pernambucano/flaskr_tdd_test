@@ -1,5 +1,5 @@
 from app import db
-from models import Flaskr
+from models import Manifesto
 
 # create the database and the db table
 db.create_all()

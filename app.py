@@ -2,7 +2,7 @@
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import os
-from flask.ext.heroku import Heroku
+from flask_heroku import Heroku
 
 # grabs the folder where the script runs
 basedir = os.path.abspath(os.path.dirname(__file__))
